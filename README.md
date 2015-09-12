@@ -5,6 +5,8 @@
 
 # Righter
 
+[![Join the chat at https://gitter.im/adamliesko/righter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/adamliesko/righter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Righter is a Rails security engine, which is based on `Roles`, `Resources` and `User` models. Currently on `0.0.1 `only `ActiveRecord` is supported. 
 
 ### How to use Righter
