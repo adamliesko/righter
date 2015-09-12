@@ -1,0 +1,21 @@
+kill:
+  id: 1
+  name: kill
+  
+vamp:
+  id: 2
+  name: vamp
+
+access_rights:
+  id: 3
+  name: manage_rights
+  controller: righter_rights
+  actions: ['*']
+  
+access_roles:
+  id: 4
+  name: manage_roles
+  controller: righter_roles
+  actions: ['*']
+  
+  

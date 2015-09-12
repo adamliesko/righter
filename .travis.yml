@@ -1,0 +1,13 @@
+language: ruby
+sudo: false
+cache: bundler
+rvm:
+- 2.2.3
+deploy:
+  provider: rubygems
+  api_key:
+    secure: qqPn+lTARNvJcgcdb0IzXICHv5/JPZ8N3bQ1IdPr9GlVFIKuPPXQSgqMbZn91sJSc341YAfovQqd5mmf6kIZ6ljDNVnKgCwg8vCMMYylQTSfFTZi9fv8KZgs52JhRJG3vitMqaxwqRDD1likUECMy/pyI74Oj/KMCyQnroyY6Hy2riXyHhUBK5cdS31kbnPggLZnQhwzpJr2WRfaQbGzphySXeovUsNfTILaxQtKAduaut56LF3MCyWMV75+dh9Nlzo2tk4GpS9bjLbDxbR3u3GT/eyWkLGbHGki0+jE/mjOJakP/rgy+nE9uYIPOBB7VqKyHJtlRxV9k4sPSUO2Rr3LQZsyC4oLRr83WhjCXcNPuG5N0H8lSQWHE9p+ADypGxuXBpCgr0GW1vT/6K6QPDd4UxlZNWeun7Tk5VwVavaeWfnbtVZSA/MvRlXFe+p0l0lr++tocXZZKWMuEcegpNbO1hX6biGMOii+x/7sSTeMawRckS64PrtUwm3WAxQ2SaJHzx6Xqydbjn6Tt9P5lWug3aXUA4dexwOwMalRIvN0/op34ISDq2425RSoxcWXm/Az349I6lFUnVdUb4FNVWaoh1NofoWIkvJ02dIAwhC3SSA1hcTQ6DlVHGMt3N04a2XuOyeJ+zbcFdVc61l8W8zNsGcq4VcN/w+vB/rTzFM=
+  gem: righter
+  on:
+    tags: true
+    repo: adamliesko/righter

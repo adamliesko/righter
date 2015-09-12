@@ -13,3 +13,10 @@ gemspec
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
 
+group :test do
+  gem 'ci_reporter'
+  gem 'minitest'
+  gem 'minitest-reporters'
+  gem 'factory_girl_rails'
+  gem 'codeclimate-test-reporter', require: nil
+end

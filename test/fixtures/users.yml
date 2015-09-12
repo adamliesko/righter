@@ -1,0 +1,27 @@
+admin:
+  id:                       4
+  login:                    admin
+  encrypted_password: $2a$10$DC7veLNgRP3J4zFT7nPFfuMAzHau.0/76iK8P9U8DiufyT3R0thuO
+  password_salt: $2a$10$DC7veLNgRP3J4zFT7nPFfu
+
+admin2:
+  id:                       14
+  login:                    admin2
+  encrypted_password: $2a$10$DC7veLNgRP3J4zFT7nPFfuMAzHau.0/76iK8P9U8DiufyT3R0thuO
+  password_salt: $2a$10$DC7veLNgRP3J4zFT7nPFfu
+
+template:
+  id:                       20
+  login:                    template
+  
+one:
+  id:     21
+  login:  smth
+  
+two:
+  id:     22
+  login:  smth2
+  
+three:
+  id:     23
+  login:  smth3

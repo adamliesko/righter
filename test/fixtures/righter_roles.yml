@@ -1,0 +1,29 @@
+secret_agent:
+  id: 1
+  name: secret_agent
+  human_name: 1
+
+bond_girl:
+  id: 2
+  name: bond_girl
+  human_name: 2
+  
+one: 
+  id: 3
+  name: one
+  human_name: 3
+
+two: 
+  id: 4
+  name: two
+  human_name: 4
+  
+three: 
+  id: 5
+  name: three
+  human_name: 5
+  
+manage_roles_and_rights:
+  id: 6
+  name: manage_roles_and_rights
+  human_name: Manage Roles and Rights
