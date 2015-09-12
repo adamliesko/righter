@@ -11,3 +11,10 @@ deploy:
   on:
     tags: true
     repo: adamliesko/righter
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/5dd05b14b3959048d85c
+    on_success: change  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: never     # options: [always|never|change] default: always
