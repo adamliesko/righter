@@ -93,12 +93,6 @@ class RighterForResourceTest < ActiveSupport::TestCase
         assert RighterRight.find_by_name("paint_Door_#{door.id}").present?
         assert RighterRight.find_by_name("change_Door_#{door.id}").present?
         assert RighterRight.find_by_name("open_Door_#{door.id}").present?
-        puts admin_role.id
-        puts
-        RighterRightsRighterRole.all.each do |r|
-          puts r.inspect
-        end
-        # assert_equal 2, admin_role.righter_rights.size
         assert_equal 1, user_role.righter_rights.size
       end
     end
@@ -117,6 +111,18 @@ class RighterForResourceTest < ActiveSupport::TestCase
     assert_nil r.resource_id
 
     assert_equal r, Door.righter_right(:manage)
+  end
+
+  test 'raises an error on empty right name' do
+    right_name = ''
+    assert_raise RighterArgumentError do
+      r = Door.create_righter_right(right_name)
+    end
+
+    assert_raise RighterArgumentError do
+      house = FactoryGirl.create :house
+      house.create_righter_right(right_name)
+    end
   end
 
   test '.auto_manage_righter_right accepts proc as parent right option' do

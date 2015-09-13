@@ -3,6 +3,22 @@ require 'test_helper'
 class RighterRightTest < ActiveSupport::TestCase
   fixtures :righter_rights
 
+  test 'top_level_rights scopes returns only rights without parent_id' do
+    r1 = FactoryGirl.create(:righter_right)
+    r2 = FactoryGirl.create(:righter_right, parent_id: r1.id)
+
+    assert RighterRight.top_level_rights, [r2]
+  end
+
+  test 'visible scopes returns only rights with fals-y hidden attribute' do
+    FactoryGirl.create(:righter_right, name: 'top level right')
+    r2 = FactoryGirl.create(:righter_right, hidden: false)
+    r3 = FactoryGirl.create(:righter_right, hidden: nil)
+    r4 = FactoryGirl.create(:righter_right, hidden: true)
+
+    assert RighterRight.visible.sort, [r2, r3, r4].sort
+  end
+
   test 'add_access_to controller/actions raises error if actions is not array or controller is nil' do
     r = righter_rights :kill
     assert_raise RighterError do

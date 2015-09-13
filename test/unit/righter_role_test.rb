@@ -194,4 +194,18 @@ class RighterRoleTest < ActiveSupport::TestCase
       r1.add_right ri
     end
   end
+
+  test '#create_or_update_with_grants' do
+    roleA = RighterRole.create! name: 'A', human_name: 'a'
+    roleB = RighterRole.create! name: 'B', human_name: 'b'
+
+    assert RighterRole.new.create_or_update_with_grants('Ax', 'ax', [roleA.name])
+
+    another_role = RighterRole.find_by(name: 'Ax')
+
+    assert roleA.create_or_update_with_grants('A', 'a', [roleB.name])
+    assert another_role.grantable_righter_roles, [roleB]
+    assert roleA.create_or_update_with_grants('A', 'a', [roleB.name, another_role.name])
+    assert another_role.grantable_righter_roles, [roleB, another_role]
+  end
 end

@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :righter_right do
-    name 'manage_doors'
+    sequence(:name) { |n| "right_#{n}" }
     human_name 'Any actions done in doors_controller'
     controller 'doors'
     actions ['*']

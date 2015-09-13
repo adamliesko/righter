@@ -4,6 +4,7 @@ class DoorsControllerTest < ActionController::TestCase
   def setup
     @user = FactoryGirl.create(:user, login: 'user')
     @admin = FactoryGirl.create(:user, login: 'admin')
+    @right_less_user = FactoryGirl.create(:user, login: 'low')
 
     @controller_role = FactoryGirl.create(:righter_role, name: 'doors_controller')
     @controller_right = FactoryGirl.create(:righter_right, name: 'all_door_actions', controller: 'doors', actions: ['*'])
@@ -66,6 +67,14 @@ class DoorsControllerTest < ActionController::TestCase
     sign_in(@user) # authorized user
     assert_nothing_raised do
       get :show, id: door.id
+    end
+  end
+
+  test 'user without rights can not access simple controller action and it triggers an Exception' do
+    door = FactoryGirl.create(:door)
+    sign_in(@right_less_user) # user without rights
+    assert_raises(RighterError) do
+      get :change, id: door.id
     end
   end
 end
