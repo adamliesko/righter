@@ -43,7 +43,7 @@ module RighterAccessible
     unless [String, Symbol].include?(role_name.class)
       fail RighterError.new('User.righter_accessible? :role expects role_name as input')
     end
-    all_user_role_names = user.righter_roles.map{ |r| r.name.to_sym }
+    all_user_role_names = user.righter_roles.map { |r| r.name.to_sym }
     all_user_role_names.include? role_name
   end
 
@@ -58,7 +58,7 @@ module RighterAccessible
     _righter_accessible_right?(user, r)
   end
 
-  def _righter_accessible_right?(user,right)
+  def _righter_accessible_right?(user, right)
     fail RighterError.new('no right provided!') unless right
 
     righter_role_ids = RighterRightsRighterRole.where(righter_right_id: right.id).collect &:righter_role_id

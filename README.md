@@ -3,6 +3,7 @@
 [![Gem Version](https://badge.fury.io/rb/righter.svg)](http://badge.fury.io/rb/righter)
 [![Build Status](https://travis-ci.org/adamliesko/righter.svg)](https://travis-ci.org/adamliesko/righter)
 [![Coverage Status](https://coveralls.io/repos/adamliesko/righter/badge.svg?branch=master&service=github)](https://coveralls.io/github/adamliesko/righter?branch=master)
+[![Codeclimate](https://d3s6mut3hikguw.cloudfront.net/github/adamliesko/righter/badges/gpa.svg)
 [![CI Docs](https://inch-ci.org/github/adamliesko/righter.svg?branch=master)](https://inch-ci.org/github/adamliesko/righter.svg?branch=master)
 [![Join the chat at https://gitter.im/adamliesko/righter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/adamliesko/righter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 

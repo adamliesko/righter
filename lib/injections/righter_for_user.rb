@@ -35,8 +35,7 @@ module RighterForUser
     @@users_id ||= self.class.arel_table[:id]
     @@right_id ||= RighterRight.arel_table[:id]
     @@righter_user_class ||= ActiveModel::Naming.singular(self)
-    right_ids = RighterRight.joins(righter_roles: @@righter_user_class).where(@@users_id.eq(id)).select(@@right_id).collect &:id
-    RighterRight.where id: right_ids.uniq
+    RighterRight.joins(righter_roles: @@righter_user_class).where(@@users_id.eq(id)).uniq # uniq in-memory
   end
 
   def add_role(role)
@@ -98,6 +97,4 @@ module RighterForUser
       end
     end
   end
-
-
 end

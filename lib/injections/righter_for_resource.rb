@@ -9,16 +9,7 @@ module RighterForResource
     def create_righter_right(right_name_prefix, options = {})
       options[:resource] = self unless options[:resource].present?
       resource = options[:resource]
-      if options[:parent_right]
-        if options[:parent_right].is_a? Proc
-          parent_right = options[:parent_right].call(resource)
-        else
-          parent_right = options[:parent_right]
-        end
-
-        parent = RighterRight.cached_find_by_name(parent_right) if parent_right
-      end
-
+      parent = find_parent_right(options)
       right = RighterRight.create(name: right_name(right_name_prefix, options),
                                   resource_class: resource.righter_right_resource_class,
                                   resource_id: resource.righter_right_resource_id,
@@ -26,12 +17,7 @@ module RighterForResource
                                   parent: parent,
                                   human_name: resource.righter_right_human_name(right_name_prefix))
 
-      if options[:auto_associate_roles]
-        options[:auto_associate_roles].each do |role_name|
-          role = RighterRole.find_by_name(role_name)
-          role.add_right(right)
-        end
-      end
+      auto_associate_roles(options[:auto_associate_roles], right) if options[:auto_associate_roles]
       right
     end
 
@@ -57,6 +43,18 @@ module RighterForResource
 
     private
 
+    def find_parent_right(options)
+      if options[:parent_right]
+        if options[:parent_right].is_a? Proc
+          parent_right = options[:parent_right].call(options[:resource])
+        else
+          parent_right = options[:parent_right]
+        end
+
+        RighterRight.cached_find_by_name(parent_right) if parent_right
+      end
+    end
+
     def right_name(right_name_prefix, options = {})
       unless right_name_prefix.present?
         fail RighterArgumentError.new('No prefix for righter_right name provided...')
@@ -66,6 +64,13 @@ module RighterForResource
       resource_class = resource.righter_right_resource_class
       resource_id = resource.righter_right_resource_id
       resource_id.present? ? "#{right_name_prefix}_#{resource_class}_#{resource_id}" : "#{right_name_prefix}_#{resource_class}"
+    end
+
+    def auto_associate_roles(roles, right)
+      roles.each do |role_name|
+        role = RighterRole.find_by_name(role_name)
+        role.add_right(right)
+      end
     end
   end
 
