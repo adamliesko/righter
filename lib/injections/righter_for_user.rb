@@ -1,5 +1,8 @@
+require 'righter/righter_accessible'
+
 module RighterForUser
   include ActionView::Helpers::TextHelper
+  include RighterAccessible
   extend ActiveSupport::Concern
 
   # when includes into an ActiveRecord::Model, creates associations for both model and RighterRole
@@ -54,28 +57,13 @@ module RighterForUser
   end
 
   def righter_accessible?(opts = {})
-    if opts[:resource]
-      righter_accessible_resource? opts
-
-    elsif opts[:role]
-      righter_accessible_role? opts[:role]
-
-    elsif opts[:right]
-      righter_accessible_right? opts[:right]
-
-    elsif opts[:controller] && opts[:action]
-      righter_accessible_ca? opts[:controller], opts[:action]
-
-    else
-      fail RighterError.new("User.righter_accessible? expects as parameter role/right/controller+action. provided: #{opts.inspect}")
-    end
+    RighterAccessible.righter_accessible?(self, opts)
   end
 
   def grantable_roles
     righter_roles.collect(&:grantable_roles).flatten
   end
 
-  # should we raise RighterError when user is trying to break the grant rules ?
   def update_roles_with_respect_to_grants(list_of_roles)
     user_who_is_updating_roles = User.current_user
     user_whom_roles_will_be_updated = self
@@ -95,7 +83,7 @@ module RighterForUser
   end
 
   def can?(right_name, resource)
-    righter_accessible_resource?(right: right_name, resource: resource)
+    RighterAccessible.righter_accessible?(self, right: right_name, resource: resource)
   end
 
   private
@@ -111,75 +99,5 @@ module RighterForUser
     end
   end
 
-  def righter_accessible_resource?(opts)
-    resource = opts[:resource]
-    fail RighterError('cannot check rights for nil resource') unless resource
 
-    unless opts[:right]
-      fail RighterError.new('option :right is missing - which right should be checked on a resource?')
-    end
-
-    unless resource.respond_to?(:righter_right)
-      fail RighterError('cannot check rights for resource which does not respond to righter_right method')
-    end
-
-    right = resource.righter_right(opts[:right], opts)
-    fail RighterError.new("cannot find resource right #{opts[:right].inspect} for resource #{opts[:resource].inspect}") unless right
-
-    _righter_accessible_right?(right)
-  end
-
-  def righter_accessible_role?(role_name)
-    unless [String, Symbol].include?(role_name.class)
-      fail RighterError.new('User.righter_accessible? :role expects role_name as input')
-    end
-    all_user_role_names = righter_roles.collect { |r| r.name.to_sym }
-    all_user_role_names.include? role_name
-  end
-
-  def righter_accessible_right?(right_name)
-    unless [String, Symbol].include?(right_name.class)
-      fail RighterError.new('User.righter_accessible? :right expects right_name as input')
-    end
-
-    r = RighterRight.cached_find_by_name right_name
-    fail RighterError.new("cannot find righter_right with name #{right_name.inspect}") unless r
-
-    _righter_accessible_right?(r)
-  end
-
-  def _righter_accessible_right?(right)
-    fail RighterError.new('no right provided!') unless right
-
-    righter_role_ids = RighterRightsRighterRole.where(righter_right_id: right.id).collect &:righter_role_id
-    user_role_ids = righter_roles.collect &:id
-
-    righter_role_ids.each do |righter_role_id|
-      return true if user_role_ids.include?(righter_role_id)
-    end
-
-    false
-  end
-
-  def righter_accessible_ca?(controller, action)
-    all_user_rights = righter_rights.where(controller: controller.to_s)
-    all_user_rights.map { |user_right| user_right.actions.collect(&:to_sym) }.each do |right_actions|
-      return true if right_actions.include?(action)
-      return true if match_right_actions_action(right_actions, action)
-    end
-
-    false
-  end
-
-  def match_right_actions_action(right_actions, action)
-    right_actions.each do |right_action| # wildcards
-      return true if right_action.to_s == '*'
-      if right_action.to_s.include?('*')
-        regex = right_action.to_s.gsub('*', '(.*)').gsub('/', '\/')
-        return true if action.match /#{regex}/
-      end
-    end
-
-    false
-  end
 end
