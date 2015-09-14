@@ -163,21 +163,20 @@ module RighterForUser
 
   def righter_accessible_ca?(controller, action)
     all_user_rights = righter_rights.where(controller: controller.to_s)
-    all_user_rights.each do |user_right|
-      if user_right.controller && user_right.actions
-        if user_right.controller.to_sym == controller
-          right_actions = user_right.actions.collect(&:to_sym)
-          return true if right_actions.include?(action)
+    all_user_rights.map { |user_right| user_right.actions.collect(&:to_sym) }.each do |right_actions|
+      return true if right_actions.include?(action)
+      return true if match_right_actions_action(right_actions, action)
+    end
 
-          right_actions.each do |right_action| # wildcards
-            return true if right_action.to_s == '*'
-            if right_action.to_s.include?('*')
-              regex = right_action.to_s.gsub('*', '(.*)').gsub('/', '\/')
-              regex_match_result = (action.match /#{regex}/)
-              return true unless regex_match_result.nil?
-            end
-          end
-        end
+    false
+  end
+
+  def match_right_actions_action(right_actions, action)
+    right_actions.each do |right_action| # wildcards
+      return true if right_action.to_s == '*'
+      if right_action.to_s.include?('*')
+        regex = right_action.to_s.gsub('*', '(.*)').gsub('/', '\/')
+        return true if action.match /#{regex}/
       end
     end
 
